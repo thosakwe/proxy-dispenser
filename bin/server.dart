@@ -7,6 +7,12 @@ main() async {
   runZoned(startServer, onError: onError);
 }
 
+dumpRoutes(Angel app) {
+  for (Route route in app.routes) {
+    print("${route.method} ${route.path} -> ${route.handlers}");
+  }
+}
+
 startServer() async {
   Angel app = await createServer();
   InternetAddress host = new InternetAddress(app.properties['host']);
@@ -14,6 +20,8 @@ startServer() async {
 
   await app.startServer(host, port);
   print("Angel server listening on ${host.address}:${port}");
+
+  dumpRoutes(app);
 }
 
 onError(error, [StackTrace stackTrace]) {

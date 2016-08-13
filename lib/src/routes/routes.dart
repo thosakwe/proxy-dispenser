@@ -9,8 +9,7 @@ configureBefore(Angel app) async {}
 
 /// Put your app routes here!
 configureRoutes(Angel app) async {
-  app.get('/', (req, ResponseContext res) => res.render('hello'));
-  app.all('*', serveStatic());
+  app.get('*', serveStatic());
 }
 
 configureAfter(Angel app) async {
@@ -27,6 +26,7 @@ configureAfter(Angel app) async {
 
 configureServer(Angel app) async {
   await configureBefore(app);
+  await app.configure(Controllers.configureServer);
   await configureRoutes(app);
   await configureAfter(app);
 }

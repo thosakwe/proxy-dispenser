@@ -1,3 +1,9 @@
 # Default server configuration.
 host: 127.0.0.1
 mongo_db: mongodb://localhost:27017/angel
+port: 3000
+google:
+  email: hectasoft@googlegroups.com
+  id: 23500177865-sjci2li883c6ihpth0cmfa984absvf51.apps.googleusercontent.com
+  secret: NB7dXMiS9qnqFxaTGC7UkCPR
+  redirect_uri: http://localhost:3000/auth/google/callback
