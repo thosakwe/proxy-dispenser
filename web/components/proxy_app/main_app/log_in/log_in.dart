@@ -2,7 +2,6 @@ part of client;
 
 @Component(
     selector: "log-in",
-    providers: const [UserService],
     template: '''
     <div class="panel panel-default text-center">
         <div class="panel-heading">
@@ -18,9 +17,17 @@ part of client;
             </a>
         </div>
     </div>''')
-class LogInComponent {
+class LogInComponent implements OnInit {
   String username, password;
   UserService userService;
+  Router router;
 
-  LogInComponent(this.userService);
+  LogInComponent(this.userService, this.router);
+
+  @override
+  ngOnInit() {
+    if (userService.user != null) {
+      router.navigate(["../Home"]);
+    }
+  }
 }

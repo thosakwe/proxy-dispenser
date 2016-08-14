@@ -3,7 +3,6 @@ part of client;
 @Component(
     selector: "main-app",
     directives: const [ROUTER_DIRECTIVES],
-    providers: const [UserService],
     template: '''
     <nav class="navbar navbar-default" role="navigation">
     <div class="container">
@@ -29,8 +28,8 @@ part of client;
                 </li>
                 <li *ngIf="userService.user != null" class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <i class="fa fa-user"></i>
-                        Dropdown
+                        <img src="{{userService.user['avatar']}}" style="max-width: 25px;" />
+                        {{userService.user["displayName"]}}
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
@@ -69,11 +68,9 @@ part of client;
     <router-outlet></router-outlet>
 </div>''')
 @RouteConfig(const [
+  const Route(path: "/login", name: "Login", component: LogInComponent),
   const Route(
-      path: "/login",
-      name: "Login",
-      component: LogInComponent,
-      useAsDefault: true)
+      path: "/home", name: "Home", component: HomeComponent, useAsDefault: true)
 ])
 class MainAppComponent {
   String loginUrl;

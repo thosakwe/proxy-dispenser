@@ -6,19 +6,22 @@ import 'schema.dart';
 
 @god.WithSchema(UserSchema)
 class User extends Model {
-  Map<String, dynamic> google;
+  String avatar, displayName, email, googleId, plan, braintreeId;
 
-  User({this.google});
+  User(
+      {this.avatar,
+      this.braintreeId,
+      this.displayName,
+      this.email,
+      this.googleId,
+      this.plan});
 }
+
 configureServer(Db db) {
   return (Angel app) async {
-    // Removed original code - user system will not be an open API
-
-    /*app.use("/api/users", new MongoTypedService<User>(db.collection("users")));
-
-    HookedService service = app.service("api/users");
-
-    // Place your hooks here!
-    service.beforeCreated.listen(hashPassword);*/
+    // Lock the service to HTTP
+    app.all("/api/users",
+        (req, res) async => throw new AngelHttpException.Forbidden());
+    app.use("/api/users", new MongoTypedService<User>(db.collection("users")));
   };
 }
