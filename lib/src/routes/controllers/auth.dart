@@ -25,8 +25,10 @@ class AuthController extends Controller {
     });
 
     app.registerMiddleware("auth", (req, res) async {
-      if (req.session["userId"] == null)
+      if (req.session["userId"] == null) {
+        res.redirect("/#/app/login");
         throw new AngelHttpException.Forbidden();
+      }
 
       return true;
     });
@@ -60,7 +62,7 @@ class AuthController extends Controller {
     // Transform this into an access token
     var client = new http.Client();
     var response =
-    await client.post("https://www.googleapis.com/oauth2/v4/token", body: {
+        await client.post("https://www.googleapis.com/oauth2/v4/token", body: {
       "code": code,
       "client_id": google["id"],
       "client_secret": google["secret"],
@@ -73,10 +75,8 @@ class AuthController extends Controller {
     req.session["token"] = token["access_token"];
     req.session["id_token"] = token["id_token"];
 
-    var accessToken = new AccessToken(
-        token["token_type"],
-        token["access_token"],
-        utils.expiryDate(token["expires_in"]));
+    var accessToken = new AccessToken(token["token_type"],
+        token["access_token"], utils.expiryDate(token["expires_in"]));
     var credentials = new AccessCredentials(
         accessToken, token["refresh_token"], googleScopes);
 

@@ -1,2 +1,6 @@
 # Development-only server configuration.
 debug: true
+stripe:
+  secret: sk_test_zj4qRSGxq05g0gDNCipxQv2u
+paypal:
+coin_payments:

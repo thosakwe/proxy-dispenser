@@ -9,10 +9,11 @@ class UserService {
     var request = new HttpRequest();
     request.open("GET", "/auth/me");
     request.onLoadEnd.listen((_) {
-      if (request.status == 200)
+      if (request.status == 200) {
         user = JSON.decode(request.responseText);
-      else
+      } else {
         window.location.hash = "#/app/login";
+      }
     });
     request.send();
   }

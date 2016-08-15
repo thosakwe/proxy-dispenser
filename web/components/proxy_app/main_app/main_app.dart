@@ -34,18 +34,24 @@ part of client;
                     </a>
                     <ul class="dropdown-menu">
                         <li>
-                            <a href="#">
-                                <i class="fa fa-cloud-download"></i>
-                                Get Proxies
+                            <a [routerLink]="['Purchase']">
+                                <i class="fa fa-shopping-cart"></i>
+                                Buy Proxies
                             </a>
                         </li>
                         <li>
+                            <a>
+                                <i class="fa fa-server"></i>
+                                My Proxies
+                            </a>
+                        </li>
+                        <li *ngIf="false">
                             <a href="#">
                                 <i class="fa fa-flag-checkered"></i>
                                 Check Proxies
                             </a>
                         </li>
-                        <li>
+                        <li *ngIf="false">
                             <a href="#">
                                 <i class="fa fa-cog"></i>
                                 My Account
@@ -69,6 +75,8 @@ part of client;
 </div>''')
 @RouteConfig(const [
   const Route(path: "/login", name: "Login", component: LogInComponent),
+  const Route(
+      path: "/purchase", name: "Purchase", component: PurchaseFormComponent),
   const Route(
       path: "/home", name: "Home", component: HomeComponent, useAsDefault: true)
 ])

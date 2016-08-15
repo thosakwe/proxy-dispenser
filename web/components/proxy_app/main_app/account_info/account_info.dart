@@ -15,11 +15,16 @@ part of client;
         </tr>
         <tr>
           <td>{{user["email"]}}</td>
-          <td *ngIf="user['plan'] == null">
+          <td *ngIf="true == false && user['plan'] == null">
             <a class="btn btn-primary">
               <i class="fa fa-user add"></i>
               Upgrade Account
             </a>
+          </td>
+          <td>
+            <div class="label label-default">
+              Basic
+            </div>
           </td>
         </tr>
       </table>
