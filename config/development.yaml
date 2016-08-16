@@ -3,4 +3,7 @@ debug: true
 stripe:
   secret: sk_test_zj4qRSGxq05g0gDNCipxQv2u
 paypal:
+  account: tobemaster13-facilitator@gmail.com
+  id: Af_kuZm9c0ok4x3LHrlyPrcXKsXyQ4nw-mpv2LAQXl3m_w2PhD8Szuud10ud4FU5lpW55xV3BuMxCSjC
+  secret: ENn4lXQdBvURCU3Jy6K2e9i6h3aKaZRrgXxk6nsoh_E6sOBCycLCZfrqL4pGg-Tbri8B_ZNVIFU-jozn
 coin_payments:

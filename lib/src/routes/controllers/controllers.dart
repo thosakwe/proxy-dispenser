@@ -7,9 +7,10 @@ import "package:googleapis_auth/auth_io.dart";
 import "package:googleapis_auth/src/utils.dart" as utils;
 import "package:http/http.dart" as http;
 import "package:json_god/json_god.dart" as god;
-import "package:mongo_dart/mongo_dart.dart";
 import 'dart:convert';
 part 'auth.dart';
+part "coin_payments.dart";
+part "paypal.dart";
 part "stripe.dart";
 
 configureServer(Angel app) async {
