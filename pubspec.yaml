@@ -20,6 +20,7 @@ dependencies:
   money: ^0.1.5
   paypal_rest_api:
     path: ../paypal_dart
+  uuid: ^0.5.3
 dev_dependencies:
   http: ">=0.11.3 <0.12.0"
   test: ">=0.12.13 <0.13.0"

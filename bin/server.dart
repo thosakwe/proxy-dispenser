@@ -2,10 +2,6 @@ import 'dart:async';
 import 'dart:io';
 import 'package:angel/angel.dart';
 import 'package:angel_framework/angel_framework.dart';
-import "package:http/http.dart" as http;
-import "package:json_god/json_god.dart" as god;
-import "package:paypal_rest_api/paypal_rest_api.dart";
-import "package:paypal_rest_api/paypal_client.dart";
 
 main() async {
   runZoned(startServer, onError: onError);
@@ -24,9 +20,6 @@ startServer() async {
 
   await app.startServer(host, port);
   print("Angel server listening on ${host.address}:${port}");
-
-  var paypal = app.properties["paypal"];
-  var client = new PayPalClient(new http.Client(), paypal["id"], paypal["secret"], paypalEndpoint: "https://api.sandbox.paypal.com");
 
   dumpRoutes(app);
 }

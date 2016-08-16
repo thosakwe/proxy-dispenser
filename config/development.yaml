@@ -1,5 +1,6 @@
 # Development-only server configuration.
 debug: true
+base_url: http://localhost:3000
 stripe:
   secret: sk_test_zj4qRSGxq05g0gDNCipxQv2u
 paypal:
