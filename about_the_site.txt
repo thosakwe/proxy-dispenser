@@ -1,0 +1,25 @@
+Site link:
+    https://proxyslots.com
+
+Site description:
+    Proxy Slots sells "slots." Each slot allows you to learn the IP address and port of exactly one PUBLIC proxy.
+    Users may purchase one or more slots. If a proxy is detected as "dead" (unreachable via TCP), then we provide information about another that is reachable.
+
+    The site provides no other service to users than giving information about proxies. In short, our business is checking the status of proxies and then feeding
+    them to users. We DO NOT host proxy servers.
+
+Site login information:
+    username: "pay"
+    password: "pal"
+
+    * This login will be usable in about an hour or so, I have to code in logic to let you in.
+    * Preferably, sign in with a Google account. The price is $0.75/proxy information.
+
+Transaction 9TJ29024BY155011A:
+    An advance purchase of 4 proxy "slots" (before prices were ultimately lowered), a few weeks before the official launch of the site
+
+Transaction 1KK032916F622751S:
+    1 proxy "slot"
+
+Transaction 97K82067PM742423W:
+    3 proxy "slots" for a friend, who was involved in the creation of the site

@@ -31,11 +31,11 @@ class StripeController extends Controller {
       throw new AngelHttpException.BadRequest(
           message: "Stripe token is required.");
 
-    if (amount == null || amount is! num || amount < 4)
+    if (amount == null || amount is! num)
       throw new AngelHttpException.BadRequest(
-          message: "Amount must be a number greater than or equal to \$4.");
+          message: "Amount must be a number.");
 
-    num numProxies = (amount % 0.8).round();
+    num numProxies = howManyProxies(amount);
     var chargeData = [
       "amount=${(amount * 100).round()}",
       "currency=usd",
@@ -52,7 +52,6 @@ class StripeController extends Controller {
     }
 
     var charge = JSON.decode(response.body);
-    god.debug = true;
     var transactionData = {
       "amount": amount,
       "gateway": "stripe",
@@ -71,7 +70,6 @@ class StripeController extends Controller {
         "transactionId": transaction["_id"].toHexString()
       });
     }
-    god.debug = false;
 
     return {"success": true};
   }

@@ -7,3 +7,10 @@ google:
   id: 23500177865-sjci2li883c6ihpth0cmfa984absvf51.apps.googleusercontent.com
   secret: NB7dXMiS9qnqFxaTGC7UkCPR
   redirect_uri: http://localhost:3000/auth/google/callback
+scraper:
+  pokemon:
+    username: _hecta1
+    password: _hecta2
+paypal_guest:
+  username: pay
+  password: pal

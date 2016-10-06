@@ -4,7 +4,11 @@ base_url: http://localhost:3000
 stripe:
   secret: sk_test_zj4qRSGxq05g0gDNCipxQv2u
 paypal:
-  account: tobemaster13-facilitator@gmail.com
-  id: Af_kuZm9c0ok4x3LHrlyPrcXKsXyQ4nw-mpv2LAQXl3m_w2PhD8Szuud10ud4FU5lpW55xV3BuMxCSjC
-  secret: ENn4lXQdBvURCU3Jy6K2e9i6h3aKaZRrgXxk6nsoh_E6sOBCycLCZfrqL4pGg-Tbri8B_ZNVIFU-jozn
+  account: none
+  id: none
+  secret: none
 coin_payments:
+  public: 9b3c61c72c6bd06a8be12be1e0b6420d96f9a6cfe79027c3eb174dc549e1dd6f
+  private: 4fBA034f1693edf9b7eAFA91aa787aBE01db440B12ab216429f4eC40E76AaC71
+  ipn_secret: I3nDaZNFXhb9NYRbw3O4
+  merchant_id: f1f7adcf0971c68041aa98371f5b8cff

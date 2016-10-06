@@ -4,12 +4,15 @@ part of angel.routes.controllers;
 class AuthController extends Controller {
   ClientId get clientId => new ClientId(google["id"], google["secret"]);
   Map google = {};
+
   final List<String> googleScopes = [
     PlusApi.PlusMeScope,
     PlusApi.UserinfoEmailScope,
     PlusApi.UserinfoProfileScope
   ];
+
   Service Users;
+  DateFormat dateFormat = new DateFormat("y-MM-dd");
 
   @override
   call(Angel app) async {
@@ -42,6 +45,94 @@ class AuthController extends Controller {
 
   @Expose("/me", middleware: const ["auth"])
   identity(RequestContext req) async => req.session["user"] ?? {};
+
+  @Expose("/proxies", middleware: const ["auth"])
+  myProxies(RequestContext req) async {
+    var result = [];
+
+    var purchases = await app
+        .service("api/purchases")
+        .index({"userId": req.session["userId"]});
+
+    for (var purchase in purchases) {
+      try {
+        result.add(await app.service("api/proxies").read(purchase.proxyId));
+      } catch (exc) {
+        stderr.writeln("Couldn't read proxy for purchase: $exc");
+      }
+    }
+
+    return result;
+  }
+
+  @Expose("/check_proxies", method: "POST", middleware: const["auth"])
+  checkProxies(RequestContext req) async {
+    var num = 0;
+    var Purchases = app.service("api/purchases"), Proxies = app.service("api/proxies");
+    var purchases = await Purchases.index({"userId": req.session["userId"]});
+
+    for (var purchase in purchases) {
+      var proxy = await Proxies.read(purchase.proxyId);
+      var proxyDef = new ProxyDef(proxy['ip'], proxy['port']);
+      var client = new ProxyClient(proxyDef, 5000);
+
+      try {
+        var response = await client.get("http://example.com");
+      } catch(exc) {
+        // Assign a new proxy
+        var proxies = await Proxies.index();
+
+        for (var p in proxies) {
+          var bought = await Purchases.index({"query": where.eq("proxyId", proxy["id"])});
+
+          if (bought.isEmpty) {
+            await Purchases.modify(proxy.id, {"proxyId": p["id"]});
+            num++;
+            break;
+          }
+        }
+      } finally {
+        client.close();
+      }
+    }
+
+    return {"error": "success", "num": num};
+  }
+
+  @Expose("/proxies.txt", middleware: const ["auth"])
+  exportProxyList(RequestContext req, ResponseContext res) async {
+    res
+      ..willCloseItself = true
+      ..end();
+
+    var response = res.underlyingResponse;
+
+    var purchases = await app
+        .service("api/purchases")
+        .index({"userId": req.session["userId"]});
+
+    var str =  "# Purchased from https://proxyslots.com\n";
+    for (var purchase in purchases) {
+      try {
+        var proxy = await app.service("api/proxies").read(purchase.proxyId);
+        str += "${proxy['ip']}:${proxy['port']}\n";
+      } catch (exc) {
+      }
+    }
+
+    var now = new DateTime.now();
+    response.headers.set("Content-Length", str.length);
+    response.headers.set("Content-Disposition", "attachment; filename=proxies-${dateFormat.format(now)}.txt");
+    response.write(str);
+    await response.close();
+
+    /*header("Content-Disposition",
+        'Content-Disposition: attachment; filename="${filename ?? file.path}"');
+    header(HttpHeaders.CONTENT_TYPE, lookupMimeType(file.path));
+    header(HttpHeaders.CONTENT_LENGTH, file.lengthSync().toString());
+    responseData.add(file.readAsBytesSync());
+    */
+  }
 
   @Expose("/google")
   oauthRedirect(ResponseContext res) async {
@@ -110,6 +201,7 @@ class AuthController extends Controller {
         "email": me.emails[0].value,
         "googleId": me.id
       });
+
       req.session["userId"] = user.id;
     }
 

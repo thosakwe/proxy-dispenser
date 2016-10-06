@@ -3,7 +3,8 @@ part of client;
 @Component(
     selector: "app-home",
     directives: const [AccountInfoComponent],
-    styles: const ['''
+    styles: const [
+      '''
     .panel-default {
         text-align: center;
     }
@@ -29,10 +30,10 @@ part of client;
         </h5>
         <account-info [user]="userService.user"></account-info>
         <div class="row">
-          <div class="col-xs-12 col-md-3">
+          <div class="col-xs-12 col-md-4">
             <div class="panel panel-default clickable" (click)="goToBuyProxies()">
               <div class="panel-heading">
-                Buy Proxies
+                Buy Slots
               </div>
               <div class="panel-body">
                 <i class="fa fa-shopping-cart fa-lg"></i>
@@ -42,7 +43,7 @@ part of client;
               </div>
             </div>
           </div>
-          <div class="col-xs-12 col-md-3">
+          <div class="col-xs-12 col-md-4" (click)="goToListProxies()">
             <div class="panel panel-default clickable">
               <div class="panel-heading">
                 My Proxies
@@ -55,7 +56,7 @@ part of client;
               </div>
             </div>
           </div>
-          <div class="col-xs-12 col-md-3">
+          <div *ngIf="false" class="col-xs-12 col-md-3">
             <div class="panel panel-default">
               <div class="panel-heading">
                 Proxy Checker
@@ -68,7 +69,7 @@ part of client;
               </div>
             </div>
           </div>
-          <div class="col-xs-12 col-md-3">
+          <div class="col-xs-12 col-md-4">
             <div class="panel panel-default">
               <div class="panel-heading">
                 Manage Account
@@ -91,4 +92,6 @@ class HomeComponent {
   HomeComponent(this.router, this.userService);
 
   goToBuyProxies() => router.navigate(["../Purchase"]);
+
+  goToListProxies() => router.navigate(["../Proxies"]);
 }

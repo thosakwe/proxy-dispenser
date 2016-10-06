@@ -8,7 +8,8 @@ class Transaction extends Model {
   String gateway, paymentId, userId;
   Map charge;
 
-  Transaction({this.amount, this.gateway, this.paymentId, this.userId, this.charge});
+  Transaction(
+      {this.amount, this.gateway, this.paymentId, this.userId, this.charge});
 }
 
 configureServer(Db db) {
@@ -16,6 +17,7 @@ configureServer(Db db) {
     // Lock the service to HTTP
     app.all("/api/transactions",
         (req, res) async => throw new AngelHttpException.Forbidden());
-    app.use("/api/transactions", new MongoService(db.collection("transactions")));
+    app.use(
+        "/api/transactions", new MongoService(db.collection("transactions")), hooked: false);
   };
 }

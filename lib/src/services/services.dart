@@ -13,6 +13,9 @@ configureServer(Angel app) async {
   Db db = new Db(app.properties["mongo_db"]);
   await db.open();
 
+  // Inject Db
+  app.container.singleton(Db);
+
   await app.configure(Purchases.configureServer(db));
   await app.configure(Proxies.configureServer(db));
   await app.configure(Transactions.configureServer(db));

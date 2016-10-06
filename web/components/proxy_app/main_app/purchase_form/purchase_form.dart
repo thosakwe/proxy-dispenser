@@ -2,8 +2,7 @@ part of client;
 
 @Component(
     selector: "purchase-form",
-    styles: const [
-      '''
+    styles: const ['''
     .col-md-4 {
         margin-bottom: 1em;
     }
@@ -13,7 +12,7 @@ part of client;
     }
     '''
     ],
-    directives: const [StripeFormComponent],
+    directives: const [StripeFormComponent, BtcFormComponent],
     template: '''
     <h5 class="page-header">
       <i class="fa fa-shopping-cart"></i>
@@ -41,13 +40,18 @@ part of client;
         </div>
     </div>
     <div class="row text-center">
-      <div class="col-xs-12 col-md-4">
-        <a class="btn btn-primary" style="background-color: #009cde; color: white;">
+      <div class="col-xs-12 col-md-6">
+        <div *ngIf="!paypal_loading" class="btn btn-primary" (click)="submitPayPal()" style="background-color: #009cde; color: white;">
             <i class="fa fa-paypal"></i>
             Buy with PayPal
-        </a>
+        </div>
+        <div *ngIf="paypal_loading" class="btn btn-primary" style="background-color: #009cde; color: white;">
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+        </div>
+        <br /><br />
+        <i>PayPal employees: Purchases are free for you, go ahead and click the 'Buy with PayPal' button to see.</i>
       </div>
-      <div class="col-xs-12 col-md-4">
+      <div class="col-xs-12 col-md-4" *ngIf="1 == 2">
         <div class="btn btn-danger" (click)="showStripe()">
             <i class="fa fa-cc-stripe"></i>
             Buy with Credit/Debit
@@ -55,33 +59,69 @@ part of client;
         <br /><br />
         <i>Payments are securely handled via <a href="https://stripe.com">Stripe</a>.</i>
       </div>
-      <div class="col-xs-12 col-md-4">
-        <div class="btn btn-warning" (click)="showBtc()">
+      <div class="col-xs-12 col-md-6">
+        <div *ngIf="!btc_loading" class="btn btn-warning" (click)="showBtc()">
             <i class="fa fa-btc"></i>
             Buy with Bitcoin
         </div>
+        <div *ngIf="btc_loading" class="btn btn-warning">
+            <i class="fa fa-circle-o-notch fa-spin"></i>
+        </div>
       </div>
     </div>
+    <br />
     <stripe-form *ngIf="stripe" [amount]="computeAmount()" (token)="handleStripeToken(\$event)"></stripe-form>
+    <btc-form *ngIf="btc" [result]="coinResult"></btc-form>
     ''')
 class PurchaseFormComponent {
   int numProxies = 5;
-  bool btc = false, stripe = false;
-  Currency _usd = new Currency("USD");
+  bool btc = false, stripe = false, btc_loading = false, paypal_loading = false;
+  Router router;
+  Map coinResult = {};
 
-  Money _makeMoney() => new Money.fromDouble((numProxies ?? 0) * 0.8, _usd);
+  PurchaseFormComponent(this.router);
 
-  computeAmount() => _makeMoney().amount;
-  computePrice() => _makeMoney().toString();
+  num computeAmount() => computeCost(numProxies ?? 0);
+  String computePrice() => computeCost(numProxies ?? 0).toString();
 
   showBtc() {
-    btc = true;
-    stripe = false;
+    btc_loading = true;
+    var request = new HttpRequest()..responseType = "json";
+    request
+      ..open("POST", "/api/coin_payments/pay")
+      ..setRequestHeader("Content-Type", "application/json");
+    request.onLoadEnd.listen((_) {
+      btc_loading = false;
+      print(request.response);
+      if (request.status == 200) {
+        coinResult = request.response["result"];
+        btc = true;
+        stripe = false;
+      }
+    });
+    request.send(
+        JSON.encode({"amount": computeAmount()}));
   }
 
   showStripe() {
+    return;
     btc = false;
     stripe = true;
+  }
+
+  submitPayPal() {
+    paypal_loading = true;
+    var request = new HttpRequest();
+    request.responseType = "json";
+    request.open("POST", "/api/paypal/pay");
+    request.setRequestHeader("Accept", "application/json");
+    request.setRequestHeader(
+        "Content-Type", "application/x-www-form-urlencoded");
+    request.send("amount=${computePrice()}");
+    request.onLoadEnd.listen((_) {
+      if (request.response != null && request.response["redirect"] != null)
+        window.location.href = request.response["redirect"];
+    });
   }
 
   handleStripeToken(token) {
@@ -91,8 +131,11 @@ class PurchaseFormComponent {
       ..setRequestHeader("Content-Type", "application/json");
     request.onLoadEnd.listen((_) {
       print(request.response);
+      if (request.status == 200) {
+        router.navigate(["../Proxies"]);
+      }
     });
-    request
-        .send(JSON.encode({"amount": (numProxies ?? 0) * 0.8, "stripeToken": token}));
+    request.send(
+        JSON.encode({"amount": computeAmount(), "stripeToken": token}));
   }
 }

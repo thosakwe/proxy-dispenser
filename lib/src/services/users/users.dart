@@ -22,6 +22,6 @@ configureServer(Db db) {
     // Lock the service to HTTP
     app.all("/api/users",
         (req, res) async => throw new AngelHttpException.Forbidden());
-    app.use("/api/users", new MongoTypedService<User>(db.collection("users")));
+    app.use("/api/users", new MongoTypedService<User>(db.collection("users")), hooked: false);
   };
 }

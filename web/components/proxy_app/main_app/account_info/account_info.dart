@@ -29,8 +29,7 @@ part of client;
         </tr>
       </table>
     </div>
-    '''
-)
+    ''')
 class AccountInfoComponent {
   @Input()
   Map user = {};

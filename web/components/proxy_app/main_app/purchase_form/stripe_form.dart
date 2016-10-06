@@ -55,13 +55,15 @@ part of client;
         </form>
       </div>
     </div>
-    '''
-)
+    ''')
 class StripeFormComponent {
-  final String _stripeKey = "pk_test_cMQHEOoT4uV3juAvB1crd0tD";
+  //final String _stripeKey = "pk_test_cMQHEOoT4uV3juAvB1crd0tD";
+  final String _stripeKey = "pk_live_NxyAepAW7ZZWW1zsi95ll5Yq";
 
-  @Input() num amount = 0;
-  @Output() EventEmitter token = new EventEmitter();
+  @Input()
+  num amount = 0;
+  @Output()
+  EventEmitter token = new EventEmitter();
 
   String card, cvc;
   num mo, yr;
@@ -86,7 +88,8 @@ class StripeFormComponent {
     request.open("POST", "https://api.stripe.com/v1/tokens");
     request.responseType = "json";
     request.setRequestHeader("Accept", "application/json");
-    request.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+    request.setRequestHeader(
+        "Content-Type", "application/x-www-form-urlencoded");
     request.onLoadEnd.listen((_) {
       token..emit(request.response["id"]);
     });
